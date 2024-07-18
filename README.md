@@ -118,6 +118,14 @@ Installing mongoose installs all its dependencies and the MongoDB database drive
 npm install mongoose
 ```
 
+## Install cors
+
+Allows requests to be carried out from other domain names - e.g. separate react front end.
+
+```bash
+npm install cors
+```
+
 ## Install Async Error Handler
 
 express-async-handler is a simplifying library that gives a short hand for error catching, replacing a try catch structure which sends the error to the next middleware on error

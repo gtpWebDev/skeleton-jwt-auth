@@ -2,9 +2,29 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-const mongoString = process.env.MONGO_STRING;
+/**
+ * -------------- DATABASE ----------------
+ *
+ * Connect to MongoDB Server using the connection strings in the `.env` file.  To implement this, place the following
+ *
+ * This is exposed in app.js, providing a global connection in any module using mongoose.conection
+ *
+ */
 
-const connection = mongoose.createConnection(mongoString);
+const devConnection = process.env.DB_STRING_DEV;
+const prodConnection = process.env.DB_STRING_PROD;
 
-// Expose the connection
-module.exports = connection;
+// Connect to the correct environment database
+if (process.env.NODE_ENV === "production") {
+  mongoose.connect(prodConnection);
+
+  mongoose.connection.on("connected", () => {
+    console.log("Database connected");
+  });
+} else {
+  mongoose.connect(devConnection);
+
+  mongoose.connection.on("connected", () => {
+    console.log("Database connected");
+  });
+}
