@@ -1,9 +1,10 @@
-# dogami-app
+# skeleton-jwt-auth
 
-An application including as yet to be confirmed uses related to the Dogami universe.
-Developed in parallel with learning on the Odin Project nodjs module, initially covering:
-
-- authentication
+A skeleton for a JSON web token strategy applied using passport.
+Applies local strategy equivalent to generate salt and hash at registration
+and check the password at login.
+Then issues a JWT for the user, using private-public keys.
+Currently set up to output JSON to a front-end application.
 
 A step-by-step guide for the general project set-up is described below...
 
@@ -139,6 +140,7 @@ npm install express-ejs-layouts
 
 ## Add directory structure
 
+**config** directory for database and passport configuration
 **models** directory for data models
 **controllers** directory for controllers
 (**views** and **routes** directories already exist)
@@ -149,8 +151,8 @@ npm install express-ejs-layouts
 
 Install **express-session** to enable session management.
 Install **connect-mongo** to enable the session information to be stored in a mongo db.
-Install **passport** and **passport-local** to...
-Install **crypto** to...
+Install **passport** and **passport-jwt** for the application of authenticaition using JWT
+Install **crypto** to generate the salt and hash at registration, and to validate at login
 
 ```bash
 npm install express-session
