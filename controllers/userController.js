@@ -110,9 +110,6 @@ exports.protected_get = [
   // passport middleware applies verifyCallback
   passport.authenticate("jwt", { session: false }),
   asyncHandler((req, res, next) => {
-    console.log("test auth after", req);
-    // console.log("test user is passed to protected", req);
-
     res.status(200).json({
       success: true,
       msg: "You are successfully authorized to this route!",
@@ -125,8 +122,6 @@ exports.admin_get = [
   passport.authenticate("jwt", { session: false }),
   authMiddleware.isAdmin,
   asyncHandler((req, res, next) => {
-    console.log("test user is passed to protected", req);
-
     res.status(200).json({
       success: true,
       msg: "You are successfully authorized to this admin route!",
