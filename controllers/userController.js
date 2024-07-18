@@ -36,7 +36,7 @@ exports.register_post = asyncHandler(async (req, res, next) => {
     username: req.body.username,
     hash: passwordHash,
     salt: salt,
-    // admin: false, // can drive authorization from JWT, chosen not to here
+    admin: false,
   });
 
   // add the new user to the database
@@ -44,7 +44,7 @@ exports.register_post = asyncHandler(async (req, res, next) => {
     // issue a JWT and return it
     const jwt = passwordUtils.issueJWT(user);
 
-    console.log("token", jwt.token);
+    // console.log("token", jwt.token);
 
     res.status(200).json({
       success: true,
