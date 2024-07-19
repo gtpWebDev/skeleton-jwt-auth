@@ -10,6 +10,9 @@ const isAdmin = require("../lib/authMiddleware").isAdmin;
 /* GET home page. */
 router.get("/", user_controller.index);
 
+/* GET a very simple test message */
+router.get("/test", user_controller.test_get);
+
 /* GET register page - get the template for registering. */
 router.get("/register", user_controller.register_get);
 

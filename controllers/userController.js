@@ -13,6 +13,13 @@ exports.index = asyncHandler(async (req, res, next) => {
   res.render("index", { title: "Home Page" });
 });
 
+exports.test_get = asyncHandler(async (req, res, next) => {
+  res.status(200).json({
+    success: true,
+    msg: "Test successful",
+  });
+});
+
 // display register page
 exports.register_get = asyncHandler(async (req, res, next) => {
   //res.render("register", { title: "Register Page" });
