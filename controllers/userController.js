@@ -1,5 +1,8 @@
 const passport = require("passport");
 const User = require("../models/userModel");
+
+const { body, validationResult } = require("express-validator");
+
 const authMiddleware = require("../lib/authMiddleware");
 
 const passwordUtils = require("../lib/passwordUtils");
@@ -33,34 +36,65 @@ exports.register_get = asyncHandler(async (req, res, next) => {
 });
 
 // user attempts to register
-exports.register_post = asyncHandler(async (req, res, next) => {
-  // apply the local strategy to generate a salt and password hash from the password
-  const saltAndHash = passwordUtils.generatePassword(req.body.password);
-  const salt = saltAndHash.salt;
-  const passwordHash = saltAndHash.passwordHash;
+exports.register_post = [
+  // Validate and sanitize received inputs (username and password).
+  body("username", "First name must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("password", "Password must be a minimum of 3 characters.")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
 
-  const newUser = new User({
-    username: req.body.username,
-    hash: passwordHash,
-    salt: salt,
-    admin: false,
-  });
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    console.log("errors array", errors.array());
 
-  // add the new user to the database
-  newUser.save().then((user) => {
-    // issue a JWT and return it
-    const jwt = passwordUtils.issueJWT(user);
+    if (!errors.isEmpty()) {
+      // There are errors. Send a message that registration has failed.
 
-    // console.log("token", jwt.token);
+      // construct helpful error message
+      let errorMsg = "";
+      errors.array().forEach((element) => {
+        errorMsg += element.msg + " ";
+      });
+      errorMsg = errorMsg.slice(0, -1);
 
-    res.status(200).json({
-      success: true,
-      user: user,
-      token: jwt.token,
-      expiresIn: jwt.expires,
-    });
-  });
-});
+      res.status(400).json({ success: false, msg: errorMsg });
+    } else {
+      // Data from form is valid.
+
+      // apply the local strategy to generate a salt and password hash from the password
+      const saltAndHash = passwordUtils.generatePassword(req.body.password);
+      const salt = saltAndHash.salt;
+      const passwordHash = saltAndHash.passwordHash;
+
+      const newUser = new User({
+        username: req.body.username,
+        hash: passwordHash,
+        salt: salt,
+        admin: false,
+      });
+
+      // add the new user to the database
+      newUser.save().then((user) => {
+        // issue a JWT and return it
+        const jwt = passwordUtils.issueJWT(user);
+
+        // console.log("token", jwt.token);
+
+        res.status(200).json({
+          success: true,
+          user: user,
+          token: jwt.token,
+          expiresIn: jwt.expires,
+        });
+      });
+    }
+  }),
+];
 
 // user requests login page
 exports.login_get = asyncHandler(async (req, res, next) => {
