@@ -6,7 +6,10 @@ and check the password at login.
 Then issues a JWT for the user, using private-public keys.
 Currently set up to output JSON to a front-end application.
 
-A step-by-step guide for the general project set-up is described below...
+A step-by-step guide which would set-up much of the project is described below, but in using this template, none of the steps need to be carried out, other than:
+
+1. npm install
+2. create .env, the public and private keys, and add the db strings
 
 ## Install the express-generator
 
@@ -23,6 +26,7 @@ Create the express project, initialise the git repository locally, then add the 
 ### Option 1 - create the express project first:
 
 Create the project with the projectname, from the general repo directory
+(Note, this supports the ejs web templates but its likely I won't use these)
 
 ```bash
  express projectname --view=ejs
@@ -111,6 +115,43 @@ Install dotenv for environment variable handling, in dev stage at least.
 npm install dotenv
 ```
 
+## Setting up .env
+
+Create **.env** and add the following environment variables:
+
+```js
+PORT = 3000;
+NODE_ENV = "production";
+DB_STRING_DEV = "";
+DB_STRING_PROD = "";
+RSA_PUBLIC_KEY = "";
+RSA_PRIVATE_KEY = "";
+```
+
+The db strings should be the following format:
+
+```bash
+mongodb+srv://admin:<password>@cluster0.fcjfpao.mongodb.net/<database>?retryWrites=true&w=majority&appName=Cluster0
+```
+
+Then generate the public and private keys with the following command:
+
+```bash
+node lib/generateKeyPair
+```
+
+Then copy the keys generated in the lib subdirectory into .env, format:
+
+```js
+RSA_PUBLIC_KEY="-----BEGIN RSA PUBLIC KEY-----
+MIICCgKCAgEApZ3krY0pIX+xGt0VryRqpdEWZaNJsgT5Ea8T/T4jGT85FasNJKRG
+...
+6V827vuqQ3uL38lxrYV6la1RQWwmxfYW4rjyVi9bn+mSNuuW4nAhNo0CAwEAAQ==
+-----END RSA PUBLIC KEY-----"
+```
+
+**Don't forget to delete the generated .pem files!**
+
 ## Install Mongoose
 
 Installing mongoose installs all its dependencies and the MongoDB database driver, but not MongoDB itself.
@@ -140,12 +181,12 @@ npm install express-ejs-layouts
 
 ## Add directory structure
 
-**config** directory for database and passport configuration
-**models** directory for data models
-**controllers** directory for controllers
-(**views** and **routes** directories already exist)
-**lib** for general utility functions
-**constants** for constants with scalability
+1. **config** directory for database and passport configuration
+2. **models** directory for data models
+3. **controllers** directory for controllers
+4. (**views** and **routes** directories already exist)
+5. **lib** for general utility functions
+6. **constants** for constants with scalability
 
 ## Authentication
 
@@ -162,9 +203,4 @@ npm install passport-local
 npm install crypto
 ```
 
-## Methodology Development
-
-Design:
-
-1. Skeleton page structure and high level function
-2. Detailed Data structure
+Note, authentication content is substantial.
