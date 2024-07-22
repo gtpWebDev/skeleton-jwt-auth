@@ -2,8 +2,6 @@ var express = require("express");
 var router = express.Router();
 
 const user_controller = require("../controllers/userController");
-const isAuth = require("../lib/authMiddleware").isAuth;
-const isAdmin = require("../lib/authMiddleware").isAdmin;
 
 // creates and a modular, mountable route handler
 
@@ -31,8 +29,11 @@ router.get("/protected", user_controller.protected_get);
 /* GET protected page to test authorization works */
 router.get("/admin", user_controller.admin_get);
 
+// GET user dashboard
+router.get("/dashboard", user_controller.dashboard_get);
+
 // POST logout page - user attempts to logout
-router.get("/logout", user_controller.logout_get);
+// router.get("/logout", user_controller.logout_get);
 
 // temp login success
 // passport recommends against logout with get, prefers post and put

@@ -109,7 +109,6 @@ exports.login_get = asyncHandler(async (req, res, next) => {
 // user attempts to login
 exports.login_post = asyncHandler(
   // if failureRedirect and successRedirect are used above, this next middleware function would not be called
-
   async (req, res, next) => {
     User.findOne({ username: req.body.username })
       .then((user) => {
@@ -147,6 +146,30 @@ exports.login_post = asyncHandler(
   }
 );
 
+// request for user profile
+exports.dashboard_get = [
+  // passport middleware applies verifyCallback
+  passport.authenticate("jwt", { session: false }),
+  // emits user in response
+  asyncHandler(async (req, res, next) => {
+    User.findOne({ _id: req.user._id })
+      .then((user) => {
+        if (!user) {
+          console.log("Could not find user:");
+          return res
+            .status(401)
+            .json({ success: false, msg: "could not find user" });
+        }
+
+        console.log("User details of logged in profile from database", user);
+        res.status(200).json(user);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }),
+];
+
 exports.protected_get = [
   // passport middleware applies verifyCallback
   passport.authenticate("jwt", { session: false }),
@@ -170,14 +193,13 @@ exports.admin_get = [
   }),
 ];
 
-exports.logout_get = asyncHandler(async (req, res, next) => {
-  // logout() is a function exposed by passport
-  // it removes req.session.passport.user - the userid for the session
-  // and it removes req.user - the user details from where they are stored (db in ths case)
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/user/login");
-  });
-});
+// Logout is meaningless in the context of JWT as the session authorization and expiry is held with the client
+// However, it may be helpful to have a process for blacklisting a token.
+// exports.logout_get = asyncHandler(async (req, res, next) => {
+//   req.logout(function (err) {
+//     if (err) {
+//       return next(err);
+//     }
+//     res.redirect("/user/login");
+//   });
+// });
