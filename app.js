@@ -50,23 +50,23 @@ app.use(express.static(path.join(__dirname, "public")));
 // mount the routers as middleware (different routes handles in indexRouter)
 app.use("/", indexRouter);
 
-// catch 404 and forward to error handler
-// this seems to create an error with code 404, and passes it onto the next middleware
-// seems sensible to have this at the end, with the error handler directly afterwards
+// 404 handler for undefined routes
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Final global error handler
 app.use(function (err, req, res, next) {
+  console.error(err.stack);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
-
-  res.status(err.status || 500);
-  res.render("error", { message: err.message, error: err });
+  // status set as the specific error status, or 500 if not available, for "Internal server error"
+  // Worth thinking about exact output here, but basic success true/false, msg and then full error
+  res
+    .status(err.status || 500)
+    .json({ success: false, message: err.message, error: err });
 });
 
 module.exports = app;

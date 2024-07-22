@@ -16,24 +16,16 @@ exports.index = asyncHandler(async (req, res, next) => {
   res.render("index", { title: "Home Page" });
 });
 
-exports.test_get = asyncHandler(async (req, res, next) => {
-  res.status(200).json({
-    success: true,
-    msg: "Test successful",
-  });
-});
-
 // display register page
-exports.register_get = asyncHandler(async (req, res, next) => {
-  //res.render("register", { title: "Register Page" });
-  const form =
-    '<h1>Register Page</h1><form method="post" action="/user/register">\
-                  Enter Username:<br><input type="text" name="username">\
-                  <br>Enter Password:<br><input type="password" name="password">\
-                  <br><br><input type="submit" value="Submit"></form>';
+// exports.register_get = asyncHandler(async (req, res, next) => {
+//   const form =
+//     '<h1>Register Page</h1><form method="post" action="/user/register">\
+//                   Enter Username:<br><input type="text" name="username">\
+//                   <br>Enter Password:<br><input type="password" name="password">\
+//                   <br><br><input type="submit" value="Submit"></form>';
 
-  res.send(form);
-});
+//   res.send(form);
+// });
 
 // user attempts to register
 exports.register_post = [
@@ -97,14 +89,14 @@ exports.register_post = [
 ];
 
 // user requests login page
-exports.login_get = asyncHandler(async (req, res, next) => {
-  const form =
-    '<h1>Login Page</h1><form method="POST" action="/user/login">\
-  Enter Username:<br><input type="text" name="username">\
-  <br>Enter Password:<br><input type="password" name="password">\
-  <br><br><input type="submit" value="Submit"></form>';
-  res.send(form);
-});
+// exports.login_get = asyncHandler(async (req, res, next) => {
+//   const form =
+//     '<h1>Login Page</h1><form method="POST" action="/user/login">\
+//   Enter Username:<br><input type="text" name="username">\
+//   <br>Enter Password:<br><input type="password" name="password">\
+//   <br><br><input type="submit" value="Submit"></form>';
+//   res.send(form);
+// });
 
 // user attempts to login
 exports.login_post = asyncHandler(
@@ -146,7 +138,7 @@ exports.login_post = asyncHandler(
   }
 );
 
-// request for user profile
+// request for dashboard page
 exports.dashboard_get = [
   // passport middleware applies verifyCallback
   passport.authenticate("jwt", { session: false }),
@@ -170,28 +162,28 @@ exports.dashboard_get = [
   }),
 ];
 
-exports.protected_get = [
-  // passport middleware applies verifyCallback
-  passport.authenticate("jwt", { session: false }),
-  asyncHandler((req, res, next) => {
-    res.status(200).json({
-      success: true,
-      msg: "You are successfully authorized to this route!",
-    });
-  }),
-];
+// exports.protected_get = [
+//   // passport middleware applies verifyCallback
+//   passport.authenticate("jwt", { session: false }),
+//   asyncHandler((req, res, next) => {
+//     res.status(200).json({
+//       success: true,
+//       msg: "You are successfully authorized to this route!",
+//     });
+//   }),
+// ];
 
-exports.admin_get = [
-  // passport middleware applies verifyCallback
-  passport.authenticate("jwt", { session: false }),
-  authMiddleware.isAdmin,
-  asyncHandler((req, res, next) => {
-    res.status(200).json({
-      success: true,
-      msg: "You are successfully authorized to this admin route!",
-    });
-  }),
-];
+// exports.admin_get = [
+//   // passport middleware applies verifyCallback
+//   passport.authenticate("jwt", { session: false }),
+//   authMiddleware.isAdmin,
+//   asyncHandler((req, res, next) => {
+//     res.status(200).json({
+//       success: true,
+//       msg: "You are successfully authorized to this admin route!",
+//     });
+//   }),
+// ];
 
 // Logout is meaningless in the context of JWT as the session authorization and expiry is held with the client
 // However, it may be helpful to have a process for blacklisting a token.
