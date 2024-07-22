@@ -162,7 +162,7 @@ exports.dashboard_get = [
         }
 
         console.log("User details of logged in profile from database", user);
-        res.status(200).json(user);
+        res.status(200).json({ success: true, data: user });
       })
       .catch((err) => {
         next(err);
