@@ -9,8 +9,8 @@ const user_controller = require("../controllers/userController");
 router.get("/", user_controller.index);
 
 /* GET register page - get the template for registering. */
-// disabled but works
-// router.get("/register", user_controller.register_get);
+// useful to keep this for a quick dev test that the server's working
+router.get("/register", user_controller.register_get);
 
 /* POST register page - user attempts to register. */
 router.post("/register", user_controller.register_post);

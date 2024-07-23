@@ -1,5 +1,17 @@
 # skeleton-jwt-auth
 
+A template appropriate for publishing a nodejs server with authentication through passport using the JSON Web Token strategy.
+
+This application is currently configured to communicate a published backend based on the **skeleton-jwt-auth** github repository.
+
+Incorporates the following elements:
+
+- Basic project set-up with Vite
+- Testing environment for react
+- Single page app router set-up
+- JSON web token configuration to interact with a separate nodejs back-end
+- Basic components to manage registration, login and viewing a protected dashboard.
+
 A skeleton for a JSON web token strategy applied using passport.
 Applies local strategy equivalent to generate salt and hash at registration
 and check the password at login.
@@ -119,13 +131,13 @@ npm install dotenv
 
 Create **.env** and add the following environment variables:
 
-```js
-PORT = 3000;
-NODE_ENV = "production";
-DB_STRING_DEV = "";
-DB_STRING_PROD = "";
-RSA_PUBLIC_KEY = "";
-RSA_PRIVATE_KEY = "";
+```bash
+PORT = 3000
+NODE_ENV = "production"
+DB_STRING_DEV = ""
+DB_STRING_PROD = ""
+RSA_PUBLIC_KEY = ""
+RSA_PRIVATE_KEY = ""
 ```
 
 The db strings should be the following format:

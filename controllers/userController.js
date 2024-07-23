@@ -17,15 +17,15 @@ exports.index = asyncHandler(async (req, res, next) => {
 });
 
 // display register page
-// exports.register_get = asyncHandler(async (req, res, next) => {
-//   const form =
-//     '<h1>Register Page</h1><form method="post" action="/user/register">\
-//                   Enter Username:<br><input type="text" name="username">\
-//                   <br>Enter Password:<br><input type="password" name="password">\
-//                   <br><br><input type="submit" value="Submit"></form>';
+exports.register_get = asyncHandler(async (req, res, next) => {
+  const form =
+    '<h1>Register Page</h1><form method="post" action="/user/register">\
+                  Enter Username:<br><input type="text" name="username">\
+                  <br>Enter Password:<br><input type="password" name="password">\
+                  <br><br><input type="submit" value="Submit"></form>';
 
-//   res.send(form);
-// });
+  res.send(form);
+});
 
 // user attempts to register
 exports.register_post = [
@@ -105,10 +105,9 @@ exports.login_post = asyncHandler(
     User.findOne({ username: req.body.username })
       .then((user) => {
         if (!user) {
-          console.log("Could not find user:");
           return res
             .status(401)
-            .json({ success: false, msg: "could not find user" });
+            .json({ success: false, msg: "Unauthorised: could not find user" });
         }
 
         // Function defined at bottom of app.js
@@ -129,7 +128,7 @@ exports.login_post = asyncHandler(
         } else {
           res
             .status(401)
-            .json({ success: false, msg: "you entered the wrong password" });
+            .json({ success: false, msg: "Unauthorised: incorrect password" });
         }
       })
       .catch((err) => {
@@ -147,13 +146,10 @@ exports.dashboard_get = [
     User.findOne({ _id: req.user._id })
       .then((user) => {
         if (!user) {
-          console.log("Could not find user:");
           return res
             .status(401)
-            .json({ success: false, msg: "could not find user" });
+            .json({ success: false, msg: "Unauthorised: could not find user" });
         }
-
-        console.log("User details of logged in profile from database", user);
         res.status(200).json({ success: true, data: user });
       })
       .catch((err) => {
